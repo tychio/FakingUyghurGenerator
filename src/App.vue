@@ -87,7 +87,7 @@ export default {
       this.input = ugyhurWords
     },
     inputFakingChinese: function () {
-      const COUNT = 1
+      const COUNT = 1000
       const signPosition = {'right': '|', 'bottom': '_'}
       const position = random(2) === 1 ? 'right' : 'bottom'
       const radicals = _.map(chineseRadicals[position], radical => {

@@ -31,15 +31,19 @@ export default {
         const letter = splited[0]
         const radical = splited[1]
         this.ctx.font = '400px Avenir'
-        this.ctx.fillText(letter, this.width*.35, this.height/2)
-        this.ctx.fillText(radical, this.width*.8, this.height/2)
+        this.ctx.scale(0.7, 1);
+        this.ctx.fillText(letter, this.width*.6, this.height/2)
+        this.ctx.fillText(radical, this.width*1.06, this.height/2)
+        this.ctx.scale(10/7, 1);
       } else if (wordText.indexOf(bottomSign) > 0) {
         const splited = wordText.split(bottomSign)
         const letter = splited[0]
         const radical = splited[1]
         this.ctx.font = '400px Avenir'
-        this.ctx.fillText(letter, this.width/2, this.height*.4)
-        this.ctx.fillText(radical, this.width/2, this.height)
+        this.ctx.scale(1, 0.7);
+        this.ctx.fillText(letter, this.width/2, this.height*.6)
+        this.ctx.fillText(radical, this.width/2, this.height*1.2)
+        this.ctx.scale(1, 10/7);
       } else {
         const length = wordText.length
         this.ctx.font = 450-length*30 + 'px Avenir'
