@@ -36,8 +36,8 @@ export default {
     }
   },
   computed: {
-    checkedWords: function () {
-      return _.filter(this.words, word => word.checked)
+    firstCheckedWord: function () {
+      return _.find(this.words, word => word.checked)
     }
   },
   methods: {
@@ -46,12 +46,16 @@ export default {
         url: data.url.split('data:image/png;base64,')[1],
         text: data.text
       })
+      this.do()
+    },
+    do: function () {
+      const word = this.firstCheckedWord
+      this.currentWord = word;
+      word.checked = false;
     },
     collect: function () {
-      this.images = [];
-      _.each(this.checkedWords, word => {
-        this.currentWord = word;
-      })
+      this.images = []
+      this.do()
     },
     download: function () {
       const zip = new JSZip();
