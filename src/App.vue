@@ -73,14 +73,14 @@ export default {
     },
     download: function () {
       const zip = new JSZip()
-      const img = zip.folder('ugyhurWords')
+      const img = zip.folder('wordImages')
       _.each(this.images, (image, index) => {
         const fileName = image.text + '.png'
         img.file(fileName, image.url, {base64: true})
       })
       zip.generateAsync({type:"blob"})
       .then(function(content) {
-          saveAs(content, "ugyhurWords.zip")
+          saveAs(content, "wordImages.zip")
       })
     },
     inputFakingUyghur: function () {
