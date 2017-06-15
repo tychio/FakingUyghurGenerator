@@ -7,6 +7,7 @@
     <button @click="download">Download</button>
     <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Painter @done="got" :word="currentWord"></Painter>
+    <textarea v-model="input"></textarea>
     <Vocabulary :list="words"></Vocabulary>
   </div>
 </template>
@@ -18,24 +19,21 @@ import JSZip from 'jszip'
 import * as words from './assets/ugyhur.json'
 import * as _ from 'lodash'
 import { saveAs } from 'file-saver'
-const wordList = _.map(words, word => {
-  return {
-    code: word,
-    text: unescape(word),
-    checked: true
-  }
-})
 
 export default {
   name: 'app',
   data: function () {
     return {
-      words: wordList,
+      input: '',
+      words: [],
       currentWord: '',
       images: [],
       checked: true,
       lock: false
     }
+  },
+  mounted: function () {
+    this.input = words;
   },
   computed: {
     firstCheckedWord: function () {
@@ -86,6 +84,19 @@ export default {
       _.each(this.words, word => {
         word.checked = checked;
       })
+    },
+    input: function (data) {
+      if (typeof data === 'string') {
+        data = data.split(',');
+      }
+      if (_.isArray(data)) {
+        this.words = _.map(data, word => {
+          return {
+            text: unescape(word),
+            checked: true
+          }
+        })
+      }
     }
   },
   components: {
@@ -134,5 +145,10 @@ button:hover {
 }
 button:active {
   background: #ee5500;
+}
+
+textarea {
+  width: 800px;
+  height: 320px;
 }
 </style>

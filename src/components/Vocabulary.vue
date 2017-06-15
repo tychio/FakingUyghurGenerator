@@ -16,6 +16,7 @@
 
 <style scoped>
 ul {
+	padding: 0;
   margin: 10px 50px;
   list-style: none;
 }

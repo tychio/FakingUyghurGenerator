@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     word: function () {
-      const length = this.word.code.match(/%/g).length;
+      const length = this.word.text.length;
       this.ctx.font = 450-length*30 + 'px Avenir'
       this.ctx.clearRect(0, 0, this.width, this.height)
       this.ctx.fillText(this.word.text, this.width/2, this.height/2)
