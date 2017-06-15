@@ -33,7 +33,8 @@ export default {
       words: wordList,
       currentWord: '',
       images: [],
-      checked: true
+      checked: true,
+      lock: false
     }
   },
   computed: {
@@ -54,10 +55,17 @@ export default {
       if (word) {
         this.currentWord = word;
         word.checked = false;
+      } else {
+        this.checked = false;
+        this.lock = false;
       }
     },
     collect: function () {
+      if (this.lock) {
+        return;
+      }
       this.images = []
+      this.lock = true;
       this.do()
     },
     download: function () {
