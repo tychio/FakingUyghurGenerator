@@ -3,11 +3,11 @@
     <header>
       <img class="logo" width="50" src="./assets/logo.png">
     </header>
-    <button @click="collect">Collect</button>
+    <button @click="collect">Generate</button>
     <button @click="download">Download</button>
-    <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Painter @done="got" :word="currentWord"></Painter>
     <textarea v-model="input"></textarea>
+    <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Vocabulary :list="words"></Vocabulary>
   </div>
 </template>
@@ -96,6 +96,7 @@ export default {
             checked: true
           }
         })
+        this.checked = data.length > 0
       }
     }
   },
