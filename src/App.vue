@@ -160,6 +160,14 @@ header button {
   height: 24px;
   line-height: 20px;
   font-size: 16px;
+  background: #41b883;
+}
+
+header button:hover {
+  background: #51c893;
+}
+header button:active {
+  background: #31a873;
 }
 
 textarea {
