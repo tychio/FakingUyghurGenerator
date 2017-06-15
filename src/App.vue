@@ -4,7 +4,7 @@
       <img class="logo" width="50" src="./assets/logo.png">
       <button @click="input = ''">Clear</button>
       <button @click="inputFakingUyghur()">Faking Uyghur</button>
-      <button>Faking Chinese</button>
+      <button @click="inputFakingChinese()">Faking Chinese</button>
     </header>
     <button @click="collect">Generate</button>
     <button @click="download">Download</button>
@@ -20,8 +20,13 @@ import Painter from './components/Painter'
 import Vocabulary from './components/Vocabulary'
 import JSZip from 'jszip'
 import * as ugyhurWords from './assets/ugyhur.json'
+import * as chineseRadicals from './assets/chinese.json'
 import * as _ from 'lodash'
 import { saveAs } from 'file-saver'
+
+const random = (length, start) => {
+  return (Math.random()+'').slice(2,9)%length + (start || 0)
+}
 
 export default {
   name: 'app',
@@ -60,17 +65,17 @@ export default {
     },
     collect: function () {
       if (this.lock) {
-        return;
+        return
       }
       this.images = []
-      this.lock = true;
+      this.lock = true
       this.do()
     },
     download: function () {
-      const zip = new JSZip();
-      const img = zip.folder('ugyhurWords');
+      const zip = new JSZip()
+      const img = zip.folder('ugyhurWords')
       _.each(this.images, (image, index) => {
-        const fileName = image.text + '.png';
+        const fileName = image.text + '.png'
         img.file(fileName, image.url, {base64: true})
       })
       zip.generateAsync({type:"blob"})
@@ -80,6 +85,19 @@ export default {
     },
     inputFakingUyghur: function () {
       this.input = ugyhurWords
+    },
+    inputFakingChinese: function () {
+      const COUNT = 1000
+      const signPosition = {'right': '|', 'bottom': '_'}
+      const position = random(2) === 1 ? 'right' : 'bottom'
+      const radicals = _.map(chineseRadicals[position], radical => {
+        return '%u'+radical
+      })
+      this.input = _.range(COUNT).map((index) => {
+        const code = '%u' + random(20901, 19968).toString(16)
+        const radicalIndex = random(radicals.length)
+        return code + signPosition[position] + radicals[radicalIndex]
+      })
     }
   },
   watch: {
