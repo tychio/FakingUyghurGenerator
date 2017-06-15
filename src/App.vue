@@ -5,8 +5,8 @@
     </header>
     <button @click="collect">Collect</button>
     <button @click="download">Download</button>
+    <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Painter @done="got" :word="currentWord"></Painter>
-    {{images}}
     <Vocabulary :list="words"></Vocabulary>
   </div>
 </template>
@@ -22,7 +22,7 @@ const wordList = _.map(words, word => {
   return {
     code: word,
     text: unescape(word),
-    checked: false
+    checked: true
   }
 })
 
@@ -32,7 +32,8 @@ export default {
     return {
       words: wordList,
       currentWord: '',
-      images: []
+      images: [],
+      checked: true
     }
   },
   computed: {
@@ -72,6 +73,13 @@ export default {
       })
     }
   },
+  watch: {
+    checked: function (checked) {
+      _.each(this.words, word => {
+        word.checked = checked;
+      })
+    }
+  },
   components: {
     Painter,
     Vocabulary
@@ -105,7 +113,7 @@ header {
 }
 
 button {
-  width: 200px;
+  width: 240px;
   height: 50px;
   line-height: 50px;
   font-size: 32px;
