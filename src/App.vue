@@ -2,10 +2,13 @@
   <div id="app">
     <header>
       <img class="logo" width="50" src="./assets/logo.png">
+      <button @click="input = ''">Clear</button>
+      <button @click="inputFakingUyghur()">Faking Uyghur</button>
+      <button>Faking Chinese</button>
     </header>
     <button @click="collect">Generate</button>
     <button @click="download">Download</button>
-    <Painter @done="got" :word="currentWord"></Painter>
+    <Painter v-show="images.length" @done="got" :word="currentWord"></Painter>
     <textarea v-model="input"></textarea>
     <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Vocabulary :list="words"></Vocabulary>
@@ -16,7 +19,7 @@
 import Painter from './components/Painter'
 import Vocabulary from './components/Vocabulary'
 import JSZip from 'jszip'
-import * as words from './assets/ugyhur.json'
+import * as ugyhurWords from './assets/ugyhur.json'
 import * as _ from 'lodash'
 import { saveAs } from 'file-saver'
 
@@ -31,9 +34,6 @@ export default {
       checked: true,
       lock: false
     }
-  },
-  mounted: function () {
-    this.input = words;
   },
   computed: {
     firstCheckedWord: function () {
@@ -51,11 +51,11 @@ export default {
     do: function () {
       const word = this.firstCheckedWord
       if (word) {
-        this.currentWord = word;
-        word.checked = false;
+        this.currentWord = word
+        word.checked = false
       } else {
-        this.checked = false;
-        this.lock = false;
+        this.checked = false
+        this.lock = false
       }
     },
     collect: function () {
@@ -77,20 +77,24 @@ export default {
       .then(function(content) {
           saveAs(content, "ugyhurWords.zip")
       })
+    },
+    inputFakingUyghur: function () {
+      this.input = ugyhurWords
     }
   },
   watch: {
     checked: function (checked) {
       _.each(this.words, word => {
-        word.checked = checked;
+        word.checked = checked
       })
     },
     input: function (data) {
+      this.images = []
       if (typeof data === 'string') {
-        data = data.split(',');
+        data = data.split(',')
       }
       if (_.isArray(data)) {
-        this.words = _.map(data, word => {
+        this.words = _.map(_.filter(data, item => _.trim(item) != ''), word => {
           return {
             text: unescape(word),
             checked: true
@@ -138,6 +142,7 @@ button {
   line-height: 50px;
   font-size: 32px;
   margin: 10px;
+  color: white;
   background: #ff6600;
   border: none;
 }
@@ -146,6 +151,15 @@ button:hover {
 }
 button:active {
   background: #ee5500;
+}
+
+header button {
+  float: left;
+  margin-top: 30px;
+  width: auto;
+  height: 24px;
+  line-height: 20px;
+  font-size: 16px;
 }
 
 textarea {
