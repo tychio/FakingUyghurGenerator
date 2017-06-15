@@ -89,14 +89,12 @@ export default {
     inputFakingChinese: function () {
       const COUNT = 1000
       const signPosition = {'right': '|', 'bottom': '_'}
-      const position = random(2) === 1 ? 'right' : 'bottom'
-      const radicals = _.map(chineseRadicals[position], radical => {
-        return '%u'+radical
-      })
       this.input = _.range(COUNT).map((index) => {
+        const position = random(2) === 1 ? 'right' : 'bottom'
+        const radicals = chineseRadicals[position];
         const code = '%u' + random(20901, 19968).toString(16)
-        const radicalIndex = random(radicals.length)
-        return code + signPosition[position] + radicals[radicalIndex]
+        const radicalCode = '%u' + radicals[random(radicals.length)]
+        return code + signPosition[position] + radicalCode
       })
     }
   },
