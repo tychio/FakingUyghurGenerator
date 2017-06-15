@@ -3,7 +3,10 @@
     <header>
       <img class="logo" width="50" src="./assets/logo.png">
     </header>
-    <Painter :word="currentWord"></Painter>
+    <button @click="collect">Collect</button>
+    <button>Download</button>
+    <Painter @done="got" :word="currentWord"></Painter>
+    {{images}}
     <Vocabulary :list="words"></Vocabulary>
   </div>
 </template>
@@ -14,11 +17,11 @@ import Vocabulary from './components/Vocabulary'
 import * as words from './assets/ugyhur.json'
 import * as _ from 'lodash'
 
-var wordList = _.map(words, function (word) {
+const wordList = _.map(words, word => {
   return {
     code: word,
     text: unescape(word),
-    checked: true
+    checked: false
   }
 })
 
@@ -27,13 +30,23 @@ export default {
   data: function () {
     return {
       words: wordList,
-      currentWord: ''
+      currentWord: '',
+      images: []
     }
   },
   computed: {
     checkedWords: function () {
-      return _.filter(this.words, function (word) {
-        return word.checked;
+      return _.filter(this.words, word => word.checked)
+    }
+  },
+  methods: {
+    got: function (imageBase64) {
+      this.images.push(imageBase64.split('data:image/png;base64,')[1])
+    },
+    collect: function () {
+      this.images = [];
+      _.each(this.checkedWords, word => {
+        this.currentWord = word;
       })
     }
   },
@@ -67,5 +80,21 @@ header {
   float: left;
   margin: 10px;
   width: 50px;
+}
+
+button {
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 32px;
+  margin: 10px;
+  background: #ff6600;
+  border: none;
+}
+button:hover {
+  background: #ff7700;
+}
+button:active {
+  background: #ee5500;
 }
 </style>
