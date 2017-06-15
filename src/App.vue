@@ -4,7 +4,7 @@
       <img class="logo" width="50" src="./assets/logo.png">
     </header>
     <button @click="collect">Collect</button>
-    <button>Download</button>
+    <button @click="download">Download</button>
     <Painter @done="got" :word="currentWord"></Painter>
     {{images}}
     <Vocabulary :list="words"></Vocabulary>
@@ -14,9 +14,10 @@
 <script>
 import Painter from './components/Painter'
 import Vocabulary from './components/Vocabulary'
+import JSZip from 'jszip'
 import * as words from './assets/ugyhur.json'
 import * as _ from 'lodash'
-
+import { saveAs } from 'file-saver'
 const wordList = _.map(words, word => {
   return {
     code: word,
@@ -40,13 +41,28 @@ export default {
     }
   },
   methods: {
-    got: function (imageBase64) {
-      this.images.push(imageBase64.split('data:image/png;base64,')[1])
+    got: function (data) {
+      this.images.push({
+        url: data.url.split('data:image/png;base64,')[1],
+        text: data.text
+      })
     },
     collect: function () {
       this.images = [];
       _.each(this.checkedWords, word => {
         this.currentWord = word;
+      })
+    },
+    download: function () {
+      const zip = new JSZip();
+      const img = zip.folder('ugyhurWords');
+      _.each(this.images, (image, index) => {
+        const fileName = image.text + '.png';
+        img.file(fileName, image.url, {base64: true})
+      })
+      zip.generateAsync({type:"blob"})
+      .then(function(content) {
+          saveAs(content, "ugyhurWords.zip")
       })
     }
   },

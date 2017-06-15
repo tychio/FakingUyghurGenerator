@@ -26,7 +26,10 @@ export default {
       this.ctx.font = 450-length*30 + 'px Avenir'
       this.ctx.clearRect(0, 0, this.width, this.height)
       this.ctx.fillText(this.word.text, this.width/2, this.height/2)
-      this.$emit('done', this.$refs.canvas.toDataURL());
+      this.$emit('done', {
+        url: this.$refs.canvas.toDataURL(),
+        text: this.word.text
+      })
     }
   }
 }
