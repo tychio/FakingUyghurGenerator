@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <header>
+      <img class="logo" width="50" src="./assets/logo.png">
+    </header>
+    <Painter></Painter>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Painter from './components/Painter'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Painter
   }
 }
 </script>
 
 <style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+header {
+  overflow: hidden;
+  height: 70px;
+  background: #eee;
+}
+
+.logo {
+  float: left;
+  margin: 10px;
+  width: 50px;
 }
 </style>
