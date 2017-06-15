@@ -3,17 +3,43 @@
     <header>
       <img class="logo" width="50" src="./assets/logo.png">
     </header>
-    <Painter></Painter>
+    <Painter :word="currentWord"></Painter>
+    <Vocabulary :list="words"></Vocabulary>
   </div>
 </template>
 
 <script>
 import Painter from './components/Painter'
+import Vocabulary from './components/Vocabulary'
+import * as words from './assets/ugyhur.json'
+import * as _ from 'lodash'
+
+var wordList = _.map(words, function (word) {
+  return {
+    code: word,
+    text: unescape(word),
+    checked: true
+  }
+})
 
 export default {
   name: 'app',
+  data: function () {
+    return {
+      words: wordList,
+      currentWord: ''
+    }
+  },
+  computed: {
+    checkedWords: function () {
+      return _.filter(this.words, function (word) {
+        return word.checked;
+      })
+    }
+  },
   components: {
-    Painter
+    Painter,
+    Vocabulary
   }
 }
 </script>

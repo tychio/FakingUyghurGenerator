@@ -22,10 +22,10 @@ export default {
     this.ctx.textAlign = 'center'
     this.ctx.textBaseline = 'middle'
   },
-  methods: {
-    draw: function () {
+  watch: {
+    word: function () {
       this.ctx.clearRect(0, 0, this.width, this.height)
-      this.ctx.fillText('abc', this.width/2, this.height/2)
+      this.ctx.fillText(this.word, this.width/2, this.height/2)
     }
   }
 }
