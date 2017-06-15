@@ -50,8 +50,10 @@ export default {
     },
     do: function () {
       const word = this.firstCheckedWord
-      this.currentWord = word;
-      word.checked = false;
+      if (word) {
+        this.currentWord = word;
+        word.checked = false;
+      }
     },
     collect: function () {
       this.images = []
