@@ -5,6 +5,7 @@
       <button @click="input = ''">Clear</button>
       <button @click="inputFakingUyghur()">Faking Uyghur</button>
       <button @click="inputFakingChinese()">Faking Chinese</button>
+      <button @click="inputRealChinese()">Real Chinese</button>
     </header>
     <button @click="collect">Generate</button>
     <button @click="download">Download</button>
@@ -92,10 +93,17 @@ export default {
       this.input = _.range(COUNT).map((index) => {
         const position = random(2) === 1 ? 'right' : 'bottom'
         const radicals = chineseRadicals[position];
-        const code = '%u' + random(20901, 19968).toString(16)
+        const code = this.getChinese()
         const radicalCode = '%u' + radicals[random(radicals.length)]
         return code + signPosition[position] + radicalCode
       })
+    },
+    inputRealChinese: function () {
+      const COUNT = 1000
+      this.input = _.range(COUNT).map((index) => this.getChinese())
+    },
+    getChinese: function () {
+      return '%u' + random(20901, 19968).toString(16)
     }
   },
   watch: {
