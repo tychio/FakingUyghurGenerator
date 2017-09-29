@@ -75,7 +75,7 @@ export default {
       const zip = new JSZip()
       const img = zip.folder('wordImages')
       _.each(this.images, (image, index) => {
-        const fileName = image.text + '.png'
+        const fileName = (_.fill(Array(3), '0').join('') + (index + 1)).slice(-3) + '.png'
         img.file(fileName, image.url, {base64: true})
       })
       zip.generateAsync({type:"blob"})
