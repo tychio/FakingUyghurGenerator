@@ -10,7 +10,9 @@
     <button @click="collect">Generate</button>
     <button @click="download">Download</button>
     <Painter v-show="images.length" @done="got" :word="currentWord"></Painter>
-    <textarea v-model="input"></textarea>
+    <div>
+      <textarea v-model="input"></textarea>
+    </div>
     <button @click="checked = !checked">{{checked? 'Unc':'C'}}hekced all</button>
     <Vocabulary :list="words"></Vocabulary>
   </div>
@@ -75,9 +77,11 @@ export default {
     download: function () {
       const zip = new JSZip()
       const img = zip.folder('wordImages')
+      const text = zip.folder('words')
       _.each(this.images, (image, index) => {
-        const fileName = (_.fill(Array(3), '0').join('') + (index + 1)).slice(-3) + '.png'
-        img.file(fileName, image.url, {base64: true})
+        const fileName = (_.fill(Array(3), '0').join('') + (index + 1)).slice(-3)
+        img.file(fileName + '.png', image.url, {base64: true})
+        text.file(fileName + '.txt', image.text);
       })
       zip.generateAsync({type:"blob"})
       .then(function(content) {
