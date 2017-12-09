@@ -29,7 +29,7 @@ export default {
       if (wordText.indexOf(rightSign) > 0) {
         const splited = wordText.split(rightSign)
         const letter = splited[0]
-        const radical = splited[1]
+        const radical = splited[1].slice(0, 1)
         this.ctx.font = '400px Avenir'
         this.ctx.scale(0.7, 1);
         this.ctx.fillText(letter, this.width*.6, this.height/2)
@@ -38,7 +38,7 @@ export default {
       } else if (wordText.indexOf(bottomSign) > 0) {
         const splited = wordText.split(bottomSign)
         const letter = splited[0]
-        const radical = splited[1]
+        const radical = splited[1].slice(0, 1)
         this.ctx.font = '400px Avenir'
         this.ctx.scale(1, 0.7);
         this.ctx.fillText(letter, this.width/2, this.height*.6)
@@ -46,7 +46,7 @@ export default {
         this.ctx.scale(1, 10/7);
       } else {
         const length = wordText.length
-        this.ctx.font = 450-length*30 + 'px Avenir'
+        this.ctx.font = 420-length*30 + 'px Avenir'
         this.ctx.fillText(wordText, this.width/2, this.height/2)
       }
 

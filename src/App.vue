@@ -79,7 +79,8 @@ export default {
       const img = zip.folder('wordImages')
       const text = zip.folder('words')
       _.each(this.images, (image, index) => {
-        const fileName = (_.fill(Array(3), '0').join('') + (index + 1)).slice(-3)
+        const fileName = (_.fill(Array(3), '0').join('') + (index + 1)).slice(-3) + '-' + image.text.slice(-1)
+        console.log(fileName)
         img.file(fileName + '.png', image.url, {base64: true})
         text.file(fileName + '.txt', image.text);
       })
@@ -94,20 +95,47 @@ export default {
     inputFakingChinese: function () {
       const COUNT = 1000
       const signPosition = {'right': '|', 'bottom': '_'}
-      this.input = _.range(COUNT).map((index) => {
+      this.input = _.uniq(_.range(COUNT).map((index) => {
         const position = random(2) === 1 ? 'right' : 'bottom'
-        const radicals = chineseRadicals[position];
-        const code = this.getChinese()
-        const radicalCode = '%u' + radicals[random(radicals.length)]
-        return code + signPosition[position] + radicalCode
-      })
+        const radical = _.sample(chineseRadicals[position])
+        const code = this.getChinese(radical.stroke)
+        const radicalCode = '%u' + radical.code
+        return '%u' + code.code + signPosition[position] + radicalCode + ' - ' + (code.stroke + radical.stroke)
+      }))
     },
     inputRealChinese: function () {
       const COUNT = 1000
       this.input = _.range(COUNT).map((index) => this.getChinese())
     },
-    getChinese: function () {
-      return '%u' + random(20901, 19968).toString(16)
+    getChinese: function (stroke) {
+      let radical = ['529B','53C8']
+      const stroke5 = ['52A1','5305','5370','7530','53E5', '7528','767D','5C14','7ACB','5170','5361','5E73','6B63','4E3B','4E1A']
+      const stroke4 = ['6C34','5E01','74E6','89C1','652F','6237','7247','8F66','6BD4','738B','4E66','5185','5C11','6C14','957F','5206','5929','4ECE','98CE','53CB']
+      const stroke3 = ['4E4B','4E5F','5927','4E8E','5DE5','51E1','5343','5DDD','5BF8','5C71','624D','5915','53E3','571F','5C0F','98DE','536B','95E8','53CA','4E45']
+      if (stroke < 3) {
+        radical = _.concat(radical, stroke5)
+      }
+      if (stroke < 4) {
+        radical = _.concat(radical, stroke4)
+      }
+      if (stroke < 5) {
+        radical = _.concat(radical, stroke3)
+      }
+
+      const sampleCode = _.sample(radical)
+      let strokeCount = 2
+      if (_.includes(stroke5, sampleCode)) {
+        strokeCount = 5
+      } else if (_.includes(stroke4, sampleCode)) {
+        strokeCount = 4
+      } else if (_.includes(stroke3, sampleCode)) {
+        strokeCount = 3
+      }
+
+      return {
+        code: sampleCode,
+        stroke: strokeCount
+      }
     }
   },
   watch: {
